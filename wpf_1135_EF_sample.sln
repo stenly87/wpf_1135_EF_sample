@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wpf_1135_EF_sample", "wpf_1135_EF_sample\wpf_1135_EF_sample.csproj", "{D2C18FA4-51C2-4469-ACB8-EADE94C59CC9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2C18FA4-51C2-4469-ACB8-EADE94C59CC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2C18FA4-51C2-4469-ACB8-EADE94C59CC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2C18FA4-51C2-4469-ACB8-EADE94C59CC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2C18FA4-51C2-4469-ACB8-EADE94C59CC9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C720B315-FE3A-4964-970F-641A34F5C9A7}
+	EndGlobalSection
+EndGlobal
