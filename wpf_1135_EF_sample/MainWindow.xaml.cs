@@ -30,6 +30,9 @@ namespace wpf_1135_EF_sample
                 Signal();
             }
         }
+
+        public Singer SelectedSinger { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,13 +43,7 @@ namespace wpf_1135_EF_sample
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            using (var db = new _1135New2024Context())
-            {
-                Singers = db.Singers.
-                    Include(s => s.Musics).
-                    Include(s => s.YellowPresses).
-                    Where(Check).ToList();
-            }
+            UpdateList();            
         }
 
         //s => s.Firstname.Contains("Алла")
@@ -56,6 +53,32 @@ namespace wpf_1135_EF_sample
         public event PropertyChangedEventHandler? PropertyChanged;
         void Signal([CallerMemberName] string prop = null) 
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+
+        private void OpenNewSingerEditor(object sender, RoutedEventArgs e)
+        {
+            new WinSingerEditor().ShowDialog();
+            UpdateList();
+        }
+
+        private void UpdateList()
+        {
+            using (var db = new _1135New2024Context())
+            {
+                Singers = db.Singers.
+                    Include(s => s.Musics).
+                    Include(s => s.YellowPresses).
+                    ToList();
+            }
+        }
+
+        private void OpenSingerEditor(object sender, RoutedEventArgs e)
+        {
+            if (SelectedSinger == null)
+                return;
+
+            new WinSingerEditor(SelectedSinger).ShowDialog();
+            UpdateList();
+        }
     }
 }
 
