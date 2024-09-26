@@ -43,7 +43,20 @@ namespace wpf_1135_EF_sample
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            UpdateList();            
+            /*
+             * пример явной загрузки
+            using (var db = new _1135New2024Context())
+            {
+                var music = db.Musics.First();
+                db.Entry(music).Reference(s => s.IdSingerNavigation).Load();
+
+                var test = music;
+
+            }   */
+
+            new NewDatabase();
+
+            //UpdateList();            
         }
 
         //s => s.Firstname.Contains("Алла")
@@ -62,12 +75,21 @@ namespace wpf_1135_EF_sample
 
         private void UpdateList()
         {
-            using (var db = new _1135New2024Context())
+            var db = DB.Instance;
+            //using (var db = new _1135New2024Context())
             {
                 Singers = db.Singers.
                     Include(s => s.Musics).
-                    Include(s => s.YellowPresses).
+                    //Include(s => s.YellowPresses).
                     ToList();
+
+                foreach (var singer in Singers)
+                {// сгенерировала запрос для каждой записи
+                    // такое в циклах лучше не делать
+                    db.Entry(singer).
+                        Collection(s => s.YellowPresses).Load();
+                }
+
             }
         }
 
@@ -78,6 +100,22 @@ namespace wpf_1135_EF_sample
 
             new WinSingerEditor(SelectedSinger).ShowDialog();
             UpdateList();
+        }
+
+        private void dClick(object sender, MouseButtonEventArgs e)
+        {
+
+            if (SelectedSinger != null)
+            {
+                var db = DB.Instance;
+                {
+
+                    db.Entry(SelectedSinger).Reload();
+                
+                }
+                MessageBox.Show(SelectedSinger.Lastname);
+            }
+             
         }
     }
 }
@@ -125,3 +163,27 @@ namespace wpf_1135_EF_sample
 // навигации (помечены virtual) используется метод расширения
 // Include (доступен с using Microsoft.EntityFrameworkCore;)
 // в Include указывается название свойства навигации - в кавычках либо лямбдой
+
+
+// Include - "жадная" загрузка - такой подход предполагает, 
+// что мы сразу загружаем много данных, которые даже необязательно
+// будут использоваться прямо сейчас
+
+// Lazy - "ленивая" загрузка, подход при котором запрос на заполнение 
+// свойства навигации данными происходит при обращении к этому свойству
+// используется через метод на билдере optionsBuilder UseLazyLoadingProxies();
+// для метода требуется nuget Microsoft.EntityFrameworkCore.Proxies
+// и DI-контейнер, в котором будет находиться DBContext
+
+// Explicit - "явная" загрузка. Можно использовать
+// метод Load в запросе вместо ToList, будет произведено заполнение
+// данными dbset. Можно загружать свойства навигации методами
+// пример: singer - объект, YellowPresses - коллекция-свойство навигации
+// db.Entry(singer).Collection(s => s.YellowPresses).Load();
+// пример2: music - объект,  IdSingerNavigation - свойство навигации
+// db.Entry(music).Reference(s => s.IdSingerNavigation).Load();
+
+// польза Explicit - можно сэкономить на начальной загрузке данных
+// 1. подгружать нужные данные по мере необходимости с помощью метода Load
+// 2. с помощью метода Reload - можно обновить состояние загруженных объектов
+// db.Entry(SelectedSinger).Reload();

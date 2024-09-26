@@ -29,11 +29,13 @@ public partial class _1135New2024Context : DbContext
     { 
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         optionsBuilder.UseMySql("server=192.168.200.13;userid=student;password=student;database=1135_new_2024", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.3.39-mariadb"));
+        //optionsBuilder.UseLazyLoadingProxies();
         optionsBuilder.LogTo(s=> File.AppendAllText("log.txt", s));
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
         modelBuilder
             .UseCollation("utf8mb4_general_ci")
             .HasCharSet("utf8mb4");
@@ -73,7 +75,8 @@ public partial class _1135New2024Context : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("title");
 
-            entity.HasOne(d => d.IdSingerNavigation).WithMany(p => p.Musics)
+            entity.HasOne(d => d.IdSingerNavigation).
+                WithMany(p => p.Musics)
                 .HasForeignKey(d => d.IdSinger)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_music_id_singer");

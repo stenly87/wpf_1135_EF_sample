@@ -17,7 +17,9 @@
                 <MenuItem Header="Изменить" Click="OpenSingerEditor"/>
             </MenuItem>
         </Menu>
-        <ListView ItemsSource="{Binding Singers}" SelectedItem="{Binding SelectedSinger}" Grid.Row="1">
+        <ListView ItemsSource="{Binding Singers}" 
+                  MouseDoubleClick="dClick"
+                  SelectedItem="{Binding SelectedSinger}" Grid.Row="1">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding Firstname}"/>
